@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix digital rain</title>
+    <style>
+      html {
+          background: black;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      body {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          width: 100%;
+      }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <script>
+      const rainDensity = 0.98 // from 0 (full) to 1 (none)
+      const rainSpeed = 40 //ms
+      const canvas = document.querySelector('#matrix');
+      const context = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+      const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const nums = '0123456789';
+      const alphabet = katakana + latin + nums;
+      const fontSize = 16;
+      const columns = canvas.width / fontSize;
+
+      const rainDrops = [];
+      for (let i = columns; i--;) {
+        rainDrops[i] = 1;
+      }
+
+      const draw = () => {
+        context.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      
+        context.fillStyle = '#0F0';
+        context.font = `${fontSize}px monospace`;
+
+      for (let i = rainDrops.length; i--;) {
+        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+        context.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+        if (rainDrops[i] * fontSize > canvas.height && Math.random() > rainDensity) {
+          rainDrops[i] = 0;
+        }
+        rainDrops[i]++;
+      }
+    };
+    setInterval(draw, rainSpeed);
+    </script>
+</body>
+</html>
